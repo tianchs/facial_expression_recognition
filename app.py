@@ -6,6 +6,50 @@ from torchvision.io import read_image
 from torchvision.utils import save_image
 import torchvision.transforms as transforms
 import torch.nn.functional as F
+from imutils.face_utils import FaceAligner
+import dlib
+
+
+detector = dlib.get_frontal_face_detector()
+predictor = dlib.shape_predictor("shape_predictor_68_face_landmarks.dat")
+fa = FaceAligner(predictor, desiredFaceWidth=256)
+
+
+def face_crop(in_path, out_path):
+    # load the input image, resize it, and convert it to grayscale
+    image = cv2.imread(in_path)
+
+    # image = imutils.resize(image, width=800)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    # show the original input image and detect faces in the grayscale
+    # image
+    # cv2.imshow("Input", image)
+    rects = detector(gray, 2)
+
+    # loop over the face detections
+    if len(rects) == 0:
+        cv2.imwrite(out_path, image)
+        return False
+    else:
+        rect = rects[0]
+        # for (rect, i) in zip(rects, range(len(rects))):
+        # extract the ROI of the *original* face, then align the face
+        # using facial landmarks
+        # (x, y, w, h) = rect_to_bb(rect)
+        # faceOrig = imutils.resize(image[y:y + h, x:x + w], width=256)
+
+        faceAligned = fa.align(image, gray, rect)
+
+        # display the output images
+        # faceOrig = cv2.resize(faceOrig, (48, 48), interpolation=cv2.INTER_AREA)
+        faceAligned = cv2.resize(faceAligned, (48, 48), interpolation=cv2.INTER_AREA)
+        faceAligned = faceAligned[:, :]
+        # cv2.imshow("Original", faceOrig)
+        # cv2.imshow("Aligned", faceAligned)
+        cv2.imwrite(out_path, faceAligned)
+        # cv2.waitKey(0)
+        return True
 
 
 class ConvBNNet(nn.Module):
@@ -67,7 +111,9 @@ while True:
         break
         #img_counter += 1
 
-image = read_image("expression.png")
+converted = face_crop("expression.png", "expression1.png")
+image = read_image("expression1.png")
+print(converted)
 image = image.type(torch.float)
 
 transform = transforms.Compose([
@@ -88,5 +134,4 @@ with torch.no_grad():
     
 
 cam.release()
-
 cv2.destroyAllWindows()
