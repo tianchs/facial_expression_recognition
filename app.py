@@ -43,8 +43,8 @@ def face_crop(in_path, out_path):
 
         # display the output images
         # faceOrig = cv2.resize(faceOrig, (48, 48), interpolation=cv2.INTER_AREA)
-        faceAligned = cv2.resize(faceAligned, (48, 48), interpolation=cv2.INTER_AREA)
-        faceAligned = faceAligned[:, :]
+        faceAligned = cv2.resize(faceAligned, (64, 64), interpolation=cv2.INTER_AREA)
+        faceAligned = faceAligned[8:58, 8:58]
         # cv2.imshow("Original", faceOrig)
         # cv2.imshow("Aligned", faceAligned)
         cv2.imwrite(out_path, faceAligned)
@@ -102,36 +102,30 @@ while True:
         # ESC pressed
         print("Escape hit, closing...")
         break
-    elif k%256 == 32:
-        # SPACE pressed
-        img_name = "expression.png"
-        cv2.imwrite(img_name, frame)
 
-        print("{} written!".format(img_name))
-        break
-        #img_counter += 1
+    img_name = "expression.png"
+    cv2.imwrite(img_name, frame)
 
-converted = face_crop("expression.png", "expression1.png")
-image = read_image("expression1.png")
-print(converted)
-image = image.type(torch.float)
+    # print("{} written!".format(img_name))
+    converted = face_crop("expression.png", "expression1.png")
+    image = read_image("expression1.png")
+    # print(converted)
+    image = image.type(torch.float)
 
-transform = transforms.Compose([
-      transforms.Resize(48),
-      transforms.CenterCrop(48),
-      transforms.Grayscale(),
-      #transforms.ToTensor(),
+    transform = transforms.Compose([
+        transforms.Resize(48),
+        transforms.CenterCrop(48),
+        transforms.Grayscale(),
     ])
-image = transform(image)
-save_image(image / 255, "image.png")
-image = torch.stack([image])
-with torch.no_grad():
-    output = model(image)
-    predicted = torch.argmax(output)
-    print(output)
-    print(predicted)
-    print(d.get(predicted.item()))
-    
+    image = transform(image)
+    save_image(image / 255, "image.png")
+    image = torch.stack([image])
+    with torch.no_grad():
+        output = model(image)
+        predicted = torch.argmax(output)
+        # print(output)
+        # print(predicted)
+        print(d.get(predicted.item()))
 
 cam.release()
 cv2.destroyAllWindows()
