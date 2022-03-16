@@ -1380,6 +1380,58 @@ footer.ty-footer {
 </style><title>final website</title>
 </head>
 <body class='typora-export'><div class='typora-export-content'>
-<div id='write'  class=''><h1 id='facial-expression-recognition'><span>Facial Expression Recognition</span></h1><p><span>Group members: Zheng Wang, Tianchen Shen, Jason Li</span></p><h2 id='setup'><span>Setup</span></h2><p><span>In this project, we are trying to apply machine learning and neural networks to recognize facial expressions. The task is to classify images of faces based on the emotions they have. We categorize facial expressions into anger, disgust, fear, happy, neutral, sad and surprise.  We also have a real-time detection and classification, using a webcam to capture an image, and feed it into the trained neural network.</span></p><h2 id='data'><span>Data</span></h2><p><span>The dataset we use is found on kaggle website, </span><a href='https://www.kaggle.com/jonathanoheix/face-expression-recognition-dataset' target='_blank' class='url'>https://www.kaggle.com/jonathanoheix/face-expression-recognition-dataset</a><span>.</span></p><h2 id='techniques'><span>Techniques</span></h2><p><span>We applied machine learning in this classification task as well as try different structures of neural networks to compare the results, including simple neural network, convolution neural network and transfer learning. We also tried varying the model parameters for learning rate, weight decay, functions, etc. for optimistic results.</span></p><h2 id='description'><span>Description</span></h2><p><span>We implemented facialDataSet to gather data from the dataset on kaggle website. </span></p><p>&nbsp;</p></div></div>
+<div id='write'  class=''><h1 id='facial-expression-recognition'><span>Facial Expression Recognition</span></h1><p><span>Group members: Zheng Wang, Tianchen Shen, Jason Li</span></p>
+
+<h2 id='setup'><span>Description</span></h2><p><span>We implemented facial expression recognition project to use a facial expression dataset from Kaggle, and train a convolution neural network to classify facial expressions from input images. We also implemented a script that uses webcam to capture images, and feed the image into the trained neural network to do real time recognition. </span></p>
+
+<h2 id='data'><span>Previous work</span></h2><p><span>We used a couple of different inspirations for our approach. </span></br></br><span>We borrowed some ideas from an existing project that participate in kaggle’s facial expression recognition competition (<a href='https://github.com/jaydeepthik/kaggle-facial-expression-recognition' target='_blank' class='url'>https://github.com/jaydeepthik/kaggle-facial-expression-recognition</a>).</span></br></br><span>We also implemented some techniques from the tutorials on the class website to improve our model.</span></br></br><span></span>We used the "cropping face" function from an online tutorial (<a href='https://pyimagesearch.com/2017/05/22/face-alignment-with-opencv-and-python/' target='_blank' class='url'>https://pyimagesearch.com/2017/05/22/face-alignment-with-opencv-and-python/</a>) to automatically detect and align faces in images.</span></p>
+
+<h2 id='techniques'><span>Our approach</span></h2><p><span>We applied machine learning in this classification task as well as try different structures of neural networks to compare the results, including simple neural network with three layers, convolution neural network, and convolution neural network with batch normalization. We applied various techniques, including simulated annealing, weight decay, data augmentation, and combining similar image groups. We also tried varying the model parameters such as learning rate, weight decay, functions, etc. for optimizing results.</span></p>
+
+<h2 id='description'><span>Setup</span></h2><p><span>In this project, we successfully applied neural networks to recognize facial expressions. The categories include 7 expressions, anger, disgust, fear, happy, neutral, sad, and surprise. By running the code provided in the jupyter notebook can obtain the trained networks. There are several different networks, and the best one could be saved for real-time recognition use. </span></br></br><span>The in the app script, we can apply the best trained result as neural network parameters. By running the script, the camera will capture images all the time, automatically crop out the face from the captured image, and print the predicted results into the console. </span></p>
+    
+<h2 id='description'><span>Datasets</span></h2><p><span>The dataset we use is found on Kaggle website, <a href='https://www.kaggle.com/jonathanoheix/face-expression-recognition-dataset' target='_blank' class='url'>https://www.kaggle.com/jonathanoheix/face-expression-recognition-dataset</a>. This is an labeled dataset that divides the data into train and test portions, and images are labeled by categories. </span></p>
+
+<h2 id='description'><span>Results</span></h2><p><span>network									         training accuracy		        testing  accuracy
+    ---------------------------------------------------------------------------------
+    simple network							                0.248569				0.258279
+    cov network								                    0.439645				0.403765
+    cov with SA								                    0.393047				0.386782
+    BNcov									                        0.908539				0.467167
+    BNcov with SA							                0.768953				0.504246
+    BNcov with SA and WD					            0.709968				0.508491
+    BNcov with SA, WD, and DA				        0.563790				0.492499
+    Combine (angry,disgust,fear,surprise)  	    0.716318				0.582366
+    Combine (disgust,fear,surprise) 		            0.544985				0.493348</span>
+
+<h2 id='description'><span>Discussion</span></h2>
+<h3>What problems did we encounter?</h3>
+
+<p><span>1. Over fitting: We found that for particular models, the training accuracy can be much higher than the testing accuracy. So it is very difficult to generalize the model for images not in the dataset. </span></p>
+
+<p><span>2. Hard to detect similar expressions: We found that for some facial expressions, the model have difficulties distinguishing between the two. For example, the surprise and fear expression. The images from the dataset for these two expressions both have big open mouth, wide open eyes, and raised eyebrow. </span></p>
+
+<h3>Are there next steps we would take if we kept working on the project?</h3>
+
+<p><span>1. From other's work on Kaggle, github, the test accuracy are generally around 60%, and our accuracy is around 50%, so there is still space for improvement. We might try different neural network structure. </span></p>
+
+<p><span>2. Transfer learning could also be a good approach for this project, since those networks can be fine tuned. </span></p>
+
+<p><span>3. Clean up dataset. There are some images only captured side face, and a few images are even not human faces. We didn't remove them in this project, since there are only very small amount, so we assume they should not have a huge effect on the model. However, removing them could be another improvement. </span></p>
+
+<h3>How does our approach differ from others? Was that beneficial?</h3>
+
+<p><span>The approach are generally similar to others' work, since we all focus on constructing convolutional neural networks, and it is believed to be an very effective model for this project. Our approach implement different model to solve the problem mention above that may be different from other approaches. We would say this can be beneficial since for this particular model, it is hard to reach a high testing accuracy, and we think it depends on the the structure of layers of neural network. </span></p>
+
+<h2>Our Demonstration Video</h2>
+<h3>Presentation</h3>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/KMZcvq2Hhio" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<h3>Real-time recognition demo</h3>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/NwM5vVIc1_A" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<h2>The Github Repository for the Project</h2>
+<a href="https://github.com/tianchs/facial_expression_recognition">https://github.com/tianchs/facial_expression_recognition</a>
+
+<p>&nbsp;</p></div></div>
 </body>
 </html>
